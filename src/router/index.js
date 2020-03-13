@@ -20,7 +20,7 @@ export default new Router({
     },
     {
       path: "/edit-recipe/:recipe_slug",
-      name: "Editrecipe",
+      name: "EditRecipe",
       component: EditRecipe
     }
   ]

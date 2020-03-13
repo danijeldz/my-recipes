@@ -6,16 +6,10 @@
         <label for="title">Name of the recipe</label>
         <input type="text" name="title" v-model="title" />
       </div>
-      <div
-        class="field"
-        v-for="(ingredient, index) in ingredients"
-        :key="index"
-      >
+      <div class="field" v-for="(ingredient, index) in ingredients" :key="index">
         <label for="ingredient">Ingredient:</label>
         <input type="text" name="ingredient" v-model="ingredients[index]" />
-        <i class="material-icons delete" @click="deleteIngredient(ingredient)"
-          >delete</i
-        >
+        <i class="material-icons delete" @click="deleteIngredient(ingredient)">delete</i>
       </div>
       <div class="field add-ingredient">
         <label for="add-ingredient">Add an ingredient</label>
@@ -28,13 +22,7 @@
       </div>
       <div class="field add-description">
         <label for="description">Description:</label>
-        <textarea
-          name="description"
-          id
-          cols="30"
-          rows="10"
-          v-model="description"
-        ></textarea>
+        <textarea name="description" id cols="30" rows="10" v-model="description"></textarea>
       </div>
       <div class="field center-align">
         <p v-if="feedback" class="red-text">{{ feedback }}</p>
@@ -97,7 +85,6 @@ export default {
       }
     },
     deleteIngredient(ing) {
-      //db.collection("recepies").get().doc()
       this.ingredients = this.ingredients.filter(ingredient => {
         return ingredient != ing;
       });

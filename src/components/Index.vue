@@ -2,9 +2,7 @@
   <div class="container index">
     <div class="card" v-for="recipe in recipes" :key="recipe.id">
       <div class="card-content">
-        <i class="material-icons delete" @click="deleteRecipe(recipe.id)"
-          >delete</i
-        >
+        <i class="material-icons delete" @click="deleteRecipe(recipe.id)">delete</i>
         <h2 class="indigo-text">{{ recipe.title }}</h2>
         <ul class="ingredients">
           <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
@@ -14,10 +12,10 @@
         <hr />
         <p class="description">{{ recipe.description }}</p>
       </div>
-      <span
-        class="btn-floating halfway-fab red darken-2 black-text material-icons center"
-      >
-        edit
+      <span class="btn-floating halfway-fab red darken-2 black-text material-icons center">
+        <router-link :to="{ name: 'EditRecipe', params: {recipe_slug: recipe.slug}}">
+          <i class="material-icons edit">edit</i>
+        </router-link>
       </span>
     </div>
   </div>
