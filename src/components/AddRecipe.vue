@@ -1,20 +1,27 @@
 <template>
   <div class="add-recipe container white">
     <h2 class="center-align black-text">Add new Recipe</h2>
-    <form action="" @submit.prevent="AddRecipe">
+    <form action @submit.prevent="AddRecipe">
       <div class="field title">
         <label for="title">Name of the recipe</label>
         <input type="text" name="title" v-model="title" />
-        <p v-if="feedback" class="red-text">{{ feedback }}</p>
+      </div>
+      <div class="field" v-for="(ingredient, index) in ingredients" :key="index">
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" name="ingredient" v-model="ingredients[index]" />
       </div>
       <div class="field add-ingredient">
         <label for="add-ingredient">Add an ingredient</label>
-        <input type="text" name="add-ingredient" />
+        <input
+          type="text"
+          name="add-ingredient"
+          @keydown.tab.prevent="AddIngredient"
+          v-model="another"
+        />
       </div>
       <div class="field center-align">
-        <button class="btn pink">
-          Add recipe
-        </button>
+        <p v-if="feedback" class="red-text">{{ feedback }}</p>
+        <button class="btn pink">Add recipe</button>
       </div>
     </form>
   </div>
@@ -26,7 +33,9 @@ export default {
   data() {
     return {
       title: null,
-      feedback: null
+      feedback: null,
+      another: null,
+      ingredients: []
     };
   },
   methods: {
@@ -34,8 +43,15 @@ export default {
       if (this.title) {
         console.log(this.title);
         this.feedback = null;
+      }
+    },
+    AddIngredient() {
+      if (this.another) {
+        this.ingredients.push(this.another);
+        this.another = null;
+        this.feedback = null;
       } else {
-        this.feedback = "You need to enter a title for this recipe";
+        this.feedback = "You must add a ingredient to add a recipe.";
       }
     }
   }
