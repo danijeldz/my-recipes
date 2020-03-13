@@ -6,9 +6,16 @@
         <label for="title">Name of the recipe</label>
         <input type="text" name="title" v-model="title" />
       </div>
-      <div class="field" v-for="(ingredient, index) in ingredients" :key="index">
+      <div
+        class="field"
+        v-for="(ingredient, index) in ingredients"
+        :key="index"
+      >
         <label for="ingredient">Ingredient:</label>
         <input type="text" name="ingredient" v-model="ingredients[index]" />
+        <i class="material-icons delete" @click="deleteIngredient(ingredient)"
+          >delete</i
+        >
       </div>
       <div class="field add-ingredient">
         <label for="add-ingredient">Add an ingredient</label>
@@ -19,6 +26,16 @@
           v-model="another"
         />
       </div>
+      <div class="field add-description">
+        <label for="description">Description:</label>
+        <textarea
+          name="description"
+          id
+          cols="30"
+          rows="10"
+          v-model="description"
+        ></textarea>
+      </div>
       <div class="field center-align">
         <p v-if="feedback" class="red-text">{{ feedback }}</p>
         <button class="btn pink">Add recipe</button>
@@ -28,6 +45,9 @@
 </template>
 
 <script>
+import db from "@/firebase/init";
+import slugify from "slugify";
+
 export default {
   name: "AddRecipe",
   data() {
@@ -35,14 +55,36 @@ export default {
       title: null,
       feedback: null,
       another: null,
-      ingredients: []
+      ingredients: [],
+      slug: null,
+      description: null
     };
   },
   methods: {
     AddRecipe() {
       if (this.title) {
-        console.log(this.title);
         this.feedback = null;
+        // create a slug
+        this.slug = slugify(this.title, {
+          replacement: "-",
+          remove: /[$*_+~.()'"\-:@]/g,
+          lower: true
+        });
+        db.collection("recepies")
+          .add({
+            title: this.title,
+            ingredients: this.ingredients,
+            slug: this.slug,
+            description: this.description
+          })
+          .then(() => {
+            this.$router.push({ name: "Index" });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        this.feedback = "YOu must enter a recipe title";
       }
     },
     AddIngredient() {
@@ -53,6 +95,12 @@ export default {
       } else {
         this.feedback = "You must add a ingredient to add a recipe.";
       }
+    },
+    deleteIngredient(ing) {
+      //db.collection("recepies").get().doc()
+      this.ingredients = this.ingredients.filter(ingredient => {
+        return ingredient != ing;
+      });
     }
   }
 };
@@ -70,5 +118,14 @@ export default {
 }
 .add-recipe .field {
   margin: 20px auto;
+  position: relative;
+}
+.add-recipe .delete {
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  color: #aaa;
+  font-size: 1.4em;
+  cursor: pointer;
 }
 </style>

@@ -14,6 +14,11 @@
         <hr />
         <p class="description">{{ recipe.description }}</p>
       </div>
+      <span
+        class="btn-floating halfway-fab red darken-2 black-text material-icons center"
+      >
+        edit
+      </span>
     </div>
   </div>
 </template>
